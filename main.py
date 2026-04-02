@@ -8,10 +8,13 @@ load_dotenv()
 
 app = FastAPI()
 
-supabase: Client = create_client(
-    os.environ["SUPABASE_URL"],
-    os.environ["SUPABASE_KEY"],
-)
+supabase_url = os.environ.get("SUPABASE_URL")
+supabase_key = os.environ.get("SUPABASE_KEY")
+
+if not supabase_url or not supabase_key:
+    raise ValueError("SUPABASE_URL and SUPABASE_KEY environment variables must be set")
+
+supabase: Client = create_client(supabase_url, supabase_key)
 
 
 class MessageCreate(BaseModel):
